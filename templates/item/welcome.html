@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% load thumbnail %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>Welcome Sadguru Amrut Tulya</title>
+</head>
+<body>
+
+<h2 align="center" style="color:darkred" >*** Sadguru's Amrit-Tulya - Tea Shop ***</h2><hr>
+
+<div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+
+
+{%  if msg %}
+<h3 align="center" style="color:forestgreen">{{ msg }}</h3>
+{% endif %}
+
+
+{% if add %}
+<h3 align="center" style="color:orangered"> Add Item Form </h3><br>
+
+    <form class="form-horizontal" action="/add/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset>
+
+
+        <!-- Text input for name-->
+        <div class="form-group">
+          <label class="col-md-5 control-label" for="">Name</label>
+          <div class="col-md-2">
+              <input id="" name="name" type="text" placeholder="" class="form-control input-md" required="">
+          </div>
+        </div>
+
+        <!-- Text input for description-->
+        <div class="form-group">
+          <label class="col-md-5 control-label" for="">Description</label>
+          <div class="col-md-2">
+          <input id="" name="desc" type="text" placeholder="" class="form-control input-md" required="">
+
+          </div>
+        </div>
+
+        <!-- Text input for price-->
+        <div class="form-group">
+          <label class="col-md-5 control-label" for="">Price</label>
+          <div class="col-md-2">
+          <input id="" name="price" type="text" placeholder="" class="form-control input-md" required="">
+
+          </div>
+        </div>
+
+        <!-- File Button for image upload-->
+        <div class="form-group">
+          <label class="col-md-5 control-label" for="">Image</label>
+          <div class="col-md-2">
+            <input id="" name="img" class="input-file" type="file">
+          </div>
+        </div>
+
+        <!-- Button for add -->
+        <div class="form-group">
+          <label class="col-md-5 control-label"></label>
+          <div class="col-md-4">
+            <button name="submit" class="btn btn-success">ADD</button>
+          </div>
+        </div>
+
+    </fieldset>
+    </form>
+
+{% else %}
+
+    {#for add item button #}
+    <div class="container" align="center">
+        <a href="/add/" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Add New Item</a>
+    </div>
+    <br>
+
+{% endif %}
+
+
+
+
+
+
+<div class="container" align="center">
+    {% if items %}
+    <h3 style="color:orangered">Available Items</h3><br>
+
+        {% for item in items %}
+            {% thumbnail item.item_image "50x50" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            {% endthumbnail %}
+
+            <a href="/details/{{ item.id }}/" >{{ item.name|title }} --- {{ item.price }} &#8377;</a>
+
+            {#for remove item button #}
+            <a href="/remove/{{ item.id }}/" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-minus"></span> Remove </a>
+            <br><hr>
+        {% endfor %}
+    {% endif %}
+</div>
+
+
+
+
+</body>
+</html>
